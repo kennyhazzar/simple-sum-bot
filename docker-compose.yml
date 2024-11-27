@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000" # Приложение будет доступно на порту 3000
+      - "3666:3666" # Приложение будет доступно на порту 3000
     env_file:
       - .env # Используем файл с переменными окружения
     command: yarn start:prod
