@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Приложение будет доступно на порту 3000
+    env_file:
+      - .env # Используем файл с переменными окружения
+    command: yarn start:prod
+    depends_on:
+      - db
+
+  # Внешняя база данных не разворачивается, но можно оставить сервис для проверки соединения
+  db:
+    image: postgres:latest
+    container_name: check_connection_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - app_network
+    entrypoint: ["sh", "-c", "echo 'Using external database'"]
+
+networks:
+  app_network:
+    driver: bridge
